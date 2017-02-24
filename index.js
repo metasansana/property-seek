@@ -24,6 +24,17 @@ function partify(value) {
     return escape_dots(strip_braces(boundary_to_dot('' + value))).split('.');
 }
 
+function clone(o) {
+
+    return Object.keys(o).reduce(function(pre, k) {
+
+        pre[k] = o[k];
+        return o;
+
+    }, {});
+
+}
+
 var get = function(o, path) {
 
     var parts = partify(path);
@@ -40,6 +51,7 @@ var get = function(o, path) {
 
 get.set = function(obj, path, value) {
     var parts = partify(path);
+  var o = clone(obj);
     parts.reduce(function(target, prop, i) {
         prop = unescape_dots(prop);
         if (parts.length - 1 === i) {
@@ -50,9 +62,9 @@ get.set = function(obj, path, value) {
         return target[prop];
 
 
-    }, obj);
+    }, o);
 
-    return obj;
+    return o;
 };
 
 module.exports = get;
