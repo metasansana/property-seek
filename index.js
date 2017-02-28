@@ -26,12 +26,14 @@ function partify(value) {
 
 function clone(o) {
 
-    return Object.keys(o).reduce(function(pre, k) {
+    return (typeof o.__CLONE__ === 'function') ?
+        o.__CLONE__() :
+        Object.keys(o).reduce(function(pre, k) {
 
-        pre[k] = o[k];
-        return o;
+            pre[k] = (typeof o[k] === 'object') ? clone(o[k]) : o[k];
+            return pre;
 
-    }, {});
+        }, {});
 
 }
 
@@ -43,29 +45,42 @@ var get = function(o, path) {
 
     var first = o[parts.shift()];
 
-    return parts.reduce(function(target, prop) {
-        if (target == null) return target;
-        return target[unescape_dots(prop)];
-    }, first);
+    return ((typeof o === 'object') && (o !== null)) ?
+
+        parts.reduce(function(target, prop) {
+            if (target == null) return target;
+            return target[unescape_dots(prop)];
+        }, first) : null;
 };
 
 get.set = function(obj, path, value) {
+
     var parts = partify(path);
-  var o = clone(obj);
-    parts.reduce(function(target, prop, i) {
-        prop = unescape_dots(prop);
-        if (parts.length - 1 === i) {
-            target[prop] = value;
-        } else {
-            target[prop] = target[prop] || {};
-        }
-        return target[prop];
 
+    if ((typeof obj !== 'object') || (obj == null)) {
+        return obj
+    } else {
 
-    }, o);
+        return _set(obj, value, parts);
+
+    }
+
+};
+
+function _set(obj, value, parts) {
+
+    var o;
+    var k;
+
+    if (parts.length === 0) return value;
+
+    o = ((typeof obj !== 'object') || (obj === null)) ? {} : clone(obj);
+    k = unescape_dots(parts[0]);
+    o[k] = _set(o[k], value, parts.slice(1));
 
     return o;
-};
+
+}
 
 module.exports = get;
 module.exports.get = get;
