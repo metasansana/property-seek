@@ -82,11 +82,11 @@ function _set(obj, value, parts) {
 
 }
 
-module.exports = function() {
+module.exports = function(k, v, o) {
 
-    if (arguments.length === 2)
+    if (o == null)
         return get.apply(null, arguments);
     else
         return set.apply(null, arguments);
 
-}
+};

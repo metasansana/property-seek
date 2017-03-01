@@ -1,37 +1,42 @@
 # property-seek
 
-Access object properties with dot and bracket support.
+Non-destructive property access and manipulation for javascript.
 
-I made this because [dot-access](https://www.npmjs.com/package/dot-access) throws
-Errors when the property does not exist. 
+Supports searching objects using the following syntax:
 
-Supports dots in property names, wrap them in quotes like regular javascrpt:
+```javascript
 
-  ```javascript
-  var Properties = require('property-seek');
+  var property = require('property-seek');
   
   var user = { 
-    fullname: { 
+    name: { 
       first: 'Joe', 
       last: 'M',
-    'dot.name':'...'
+    'dot.name':'Joe.M'
     },
-    'dot.value':'...'
+    'dot.value':12
   };
   
   // get
-  Properties.get(user, 'fullname.first'); // 'Joe'
-  Properties.get(user, '\'dot.value\''); // '...''
-  Properties.get(user, 'fullname[\'dot.value\']'); // '...''
+  property('name.first', user);                 // 'Joe'
+  property('name[first]', user);                // 'Joe'
+  property("'dot.name'", user);                 // 'Joe.M'
+  property("name['dot.value']");                // 12
 
-  // or set
-  Properties.set(user, 'fullname.last', 'T'); // 'T'
+  // or use it to set values, the original object is not modified!
+  property('name', 'T', user);         //{name: 'T', 'dot.value':12}
   ```
 
 ## Installation
 
- $ npm install --save property-seek
+```sh
+ npm install --save property-seek
+```
+## Test
+```sh
+npm test
+```
 
 ## License
 
-  Apache2
+MIT (c) Lasana Murray
