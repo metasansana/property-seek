@@ -26,8 +26,7 @@ function partify(value) {
 
 function clone(o) {
 
-  if(typeof o !== 'object')
-    return o;
+    if ((typeof o !== 'object') || (typeof o === null))        return o;
 
     return (typeof o.__CLONE__ === 'function') ?
         o.__CLONE__(clone) :
