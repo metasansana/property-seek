@@ -1,4 +1,4 @@
-var Properties = require('./');
+var property = require('./');
 var must = require('must');
 var user;
 var o;
@@ -26,39 +26,39 @@ describe('property-seek', function() {
 
     it('should return get the correct value', function() {
 
-        must(Properties.get(user, 'name')).be.an.object();
-        must(Properties.get(user, 'name.first')).equal('Joe');
-        must(Properties.get(user, 'name.last')).equal('M');
-        must(Properties.get(user, 'meta.status.banned')).equal(true);
-        must(Properties.get(user, 'meta[status][banned]')).equal(true);
-        must(Properties.get(user, '\'dot.value\'')).equal('...');
-        must(Properties.get(user, 'name[\'dot.name\']')).equal('Joe.M');
-        must(Properties.get(user, 'nam')).be.undefined();
+        must(property('name', user)).be.an.object();
+        must(property('name.first', user)).equal('Joe');
+        must(property('name.last', user)).equal('M');
+        must(property('meta.status.banned', user)).equal(true);
+        must(property('meta[status][banned]', user)).equal(true);
+        must(property('\'dot.value\'', user)).equal('...');
+        must(property('name[\'dot.name\']', user)).equal('Joe.M');
+        must(property('nam', user)).be.undefined();
     });
 
     it('should not mistreat zeros', function() {
 
-        must(Properties.get({
+        must(property( 'the.zero.value',  {
             the: {
                 zero: {
                     value: 0
                 }
             }
-        }, 'the.zero.value')).be(0);
+        })).be(0);
 
-        must(Properties.get({
+        must(property( 'the.zero.value', {
             the: {
                 zero: {
                     value: '0'
                 }
             }
-        }, 'the.zero.value')).be('0');
+        })).be('0');
 
     });
 
     it('should set single values', function() {
 
-        must(Properties.set({}, 'name', 'sana')).eql({
+        must(property('name', 'sana', {})).eql({
             name: 'sana'
         });
 
@@ -66,7 +66,7 @@ describe('property-seek', function() {
 
     it('should set nested (1) values', function() {
 
-        o = Properties.set(user, 'name.first', 'Bob');
+        o = property('name.first', 'Bob', user);
 
         must(o).eql({
             name: {
@@ -86,7 +86,7 @@ describe('property-seek', function() {
 
     it('should set nested (2) values', function() {
 
-        o = Properties.set(user, 'meta.status.banned', false);
+        o = property('meta.status.banned', false, user);
         must(o).eql({
             name: {
                 first: 'Joe',
@@ -105,7 +105,7 @@ describe('property-seek', function() {
 
     it('should set new nested values', function() {
 
-        o = Properties.set(user, 'points', 0);
+        o = property( 'points', 0, user);
 
         must(o).eql({
             name: {
@@ -123,6 +123,5 @@ describe('property-seek', function() {
         });
 
     });
-
 
 });

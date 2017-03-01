@@ -37,7 +37,7 @@ function clone(o) {
 
 }
 
-var get = function(o, path) {
+function get(path, o) {
 
     var parts = partify(path);
     if (parts.length === 1) return o[unescape_dots(parts[0])];
@@ -53,7 +53,7 @@ var get = function(o, path) {
         }, first) : null;
 };
 
-get.set = function(obj, path, value) {
+function set(path, value, obj) {
 
     var parts = partify(path);
 
@@ -82,5 +82,11 @@ function _set(obj, value, parts) {
 
 }
 
-module.exports = get;
-module.exports.get = get;
+module.exports = function() {
+
+    if (arguments.length === 2)
+        return get.apply(null, arguments);
+    else
+        return set.apply(null, arguments);
+
+}
