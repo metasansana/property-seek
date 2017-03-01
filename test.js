@@ -38,7 +38,7 @@ describe('property-seek', function() {
 
     it('should not mistreat zeros', function() {
 
-        must(property( 'the.zero.value',  {
+        must(property('the.zero.value', {
             the: {
                 zero: {
                     value: 0
@@ -46,7 +46,7 @@ describe('property-seek', function() {
             }
         })).be(0);
 
-        must(property( 'the.zero.value', {
+        must(property('the.zero.value', {
             the: {
                 zero: {
                     value: '0'
@@ -105,7 +105,7 @@ describe('property-seek', function() {
 
     it('should set new nested values', function() {
 
-        o = property( 'points', 0, user);
+        o = property('points', 0, user);
 
         must(o).eql({
             name: {
@@ -123,5 +123,24 @@ describe('property-seek', function() {
         });
 
     });
+
+    it('should properly clone', function() {
+
+        var o = {
+            a: 1,
+            b: 'c',
+            d: {
+                __CLONE__: function(f) {
+                    return {
+                        aa: f(11)
+                    };
+                }
+            }
+        };
+
+        must(property('e', 40, o)).eql({a:1, b:'c', d: {aa:11}, e:40});
+
+    });
+
 
 });
