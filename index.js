@@ -27,7 +27,7 @@ function partify(value) {
 function clone(o) {
 
     return (typeof o.__CLONE__ === 'function') ?
-        o.__CLONE__() :
+        o.__CLONE__(clone) :
         Object.keys(o).reduce(function(pre, k) {
 
             pre[k] = (typeof o[k] === 'object') ? clone(o[k]) : o[k];
