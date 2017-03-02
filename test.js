@@ -24,6 +24,14 @@ describe('property-seek', function() {
         };
     });
 
+    it('should only work with object', function() {
+
+        must(function() {
+            property('name', null)
+        }).throw(TypeError);
+
+    });
+
     it('should return get the correct value', function() {
 
         must(property('name', user)).be.an.object();
@@ -138,7 +146,14 @@ describe('property-seek', function() {
             }
         };
 
-        must(property('e', 40, o)).eql({a:1, b:'c', d: {aa:11}, e:40});
+        must(property('e', 40, o)).eql({
+            a: 1,
+            b: 'c',
+            d: {
+                aa: 11
+            },
+            e: 40
+        });
 
     });
 

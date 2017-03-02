@@ -42,10 +42,15 @@ function clone(o) {
 function get(path, o) {
 
     var parts = partify(path);
+  var first;
+
+    if (typeof o !== 'object')
+        throw new TypeError('get(): expects an object got ' + typeof o);
+
     if (parts.length === 1) return o[unescape_dots(parts[0])];
     if (parts.length === 0) return;
 
-    var first = o[parts.shift()];
+    first = o[parts.shift()];
 
     return ((typeof o === 'object') && (o !== null)) ?
 
