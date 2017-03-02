@@ -26,14 +26,14 @@ function partify(value) {
 
 function clone(o) {
 
-    if ((typeof o !== 'object') || (o === null)) 
-    return o;
+    if ((typeof o !== 'object') || (o === null))
+        return o;
 
-  if(Array.isArray(o))
-    return o.map(clone);
+    if (Array.isArray(o))
+        return o.map(clone);
 
     return (typeof o.__CLONE__ === 'function') ?
-        o.__CLONE__(clone) :
+        o.__CLONE__(clone) : (o.constructor !== Object) ? o :
         Object.keys(o).reduce(function(pre, k) {
 
             pre[k] = (typeof o[k] === 'object') ? clone(o[k]) : o[k];
