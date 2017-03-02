@@ -27,7 +27,7 @@ describe('property-seek', function() {
     it('should only work with object', function() {
 
         must(function() {
-            property('name', null)
+            property('name', null);
         }).throw(TypeError);
 
     });
@@ -157,5 +157,28 @@ describe('property-seek', function() {
 
     });
 
+    it('should properly clone arrays', function() {
+
+        must(property('name', 'Justin', {
+            name: 'Agnes',
+            meta: {
+                hits: [1, 1, 0, {
+                    c: {
+                        n: []
+                    }
+                }]
+            }
+        })).eql({
+            name: 'Justin',
+            meta: {
+                hits: [1, 1, 0, {
+                    c: {
+                        n: []
+                    }
+                }]
+            }
+        });
+
+    });
 
 });

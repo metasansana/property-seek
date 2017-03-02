@@ -26,7 +26,11 @@ function partify(value) {
 
 function clone(o) {
 
-    if ((typeof o !== 'object') || (o === null)) return o;
+    if ((typeof o !== 'object') || (o === null)) 
+    return o;
+
+  if(Array.isArray(o))
+    return o.map(clone);
 
     return (typeof o.__CLONE__ === 'function') ?
         o.__CLONE__(clone) :
@@ -42,7 +46,7 @@ function clone(o) {
 function get(path, o) {
 
     var parts = partify(path);
-  var first;
+    var first;
 
     if (typeof o !== 'object')
         throw new TypeError('get(): expects an object got ' + typeof o);
