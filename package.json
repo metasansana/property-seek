@@ -8,6 +8,8 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha test.js"
   },
+  "main":"index.js",
+  "types":"index.d.ts",
   "description": "Access object properties with dot and bracket support.",
   "repository": {
     "type": "git",
