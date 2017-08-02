@@ -1,6 +1,6 @@
 {
   "name": "property-seek",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "files": [
     "index.js"
   ],
@@ -8,8 +8,8 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha test.js"
   },
-  "main":"index.js",
-  "types":"index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "description": "Access object properties with dot and bracket support.",
   "repository": {
     "type": "git",
