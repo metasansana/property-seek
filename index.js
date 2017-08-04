@@ -7,8 +7,8 @@ function strip_braces(value) {
     return value.split('[').join('.').split(']').join('');
 }
 function escape_dots(value) {
-    value = value.split('\'');
-    return (value.length < 3) ? value.join('\'') : value.map(function (seg) {
+    var val = value.split('\'');
+    return (val.length < 3) ? val.join('\'') : val.map(function (seg) {
         if (seg.length < 3)
             return seg;
         if ((seg[0] === '.') || (seg[seg.length - 1] === '.'))
@@ -24,42 +24,48 @@ function partify(value) {
         return;
     return escape_dots(strip_braces(boundary_to_dot('' + value))).split('.');
 }
+function canClone(o) {
+    return (typeof o.__CLONE__ === 'function');
+}
 function clone(o) {
     if ((typeof o !== 'object') || (o === null))
         return o;
     if (Array.isArray(o))
         return o.map(clone);
-    return (typeof o.__CLONE__ === 'function') ?
+    return (canClone(o)) ?
         o.__CLONE__(clone) : (o.constructor !== Object) ? o :
         Object.keys(o).reduce(function (pre, k) {
-            pre[k] = (typeof o[k] === 'object') ? clone(o[k]) : o[k];
+            pre[k] = (typeof o[k] === 'object') ?
+                clone(o[k]) : o[k];
             return pre;
         }, {});
 }
-;
 function get(path, o) {
     var parts = partify(path);
     var first;
-    if (typeof o !== 'object')
+    if (typeof o === 'object') {
+        if (parts.length === 1)
+            return o[unescape_dots(parts[0])];
+        if (parts.length === 0)
+            return;
+        first = o[parts.shift()];
+        return ((typeof o === 'object') && (o !== null)) ?
+            parts.reduce(function (target, prop) {
+                if (target == null)
+                    return target;
+                return target[unescape_dots(prop)];
+            }, first) : null;
+    }
+    else {
         throw new TypeError('get(): expects an object got ' + typeof o);
-    if (parts.length === 1)
-        return o[unescape_dots(parts[0])];
-    if (parts.length === 0)
-        return;
-    first = o[parts.shift()];
-    return ((typeof o === 'object') && (o !== null)) ?
-        parts.reduce(function (target, prop) {
-            if (target == null)
-                return target;
-            return target[unescape_dots(prop)];
-        }, first) : null;
+    }
 }
 exports.get = get;
 ;
 function set(path, value, obj) {
     var parts = partify(path);
     if ((typeof obj !== 'object') || (obj == null)) {
-        return obj;
+        return clone(obj);
     }
     else {
         return _set(obj, value, parts);

@@ -8,7 +8,8 @@
         "allowUnreachableCode": true,
         "noUnusedParameters": true,
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "noImplicitAny":true
     },
     "exclude": ["node_modules"]
 

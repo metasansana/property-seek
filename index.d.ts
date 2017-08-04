@@ -1,6 +1,6 @@
-export interface Source<A> {
-    [key: string]: A;
+export interface Cloneable<B> {
+    __CLONE__: (b: B) => B;
 }
-export declare function get<A>(path: string, o: Source<A>): any;
-export declare function set<A>(path: string, value: A, obj: Source<A>): any;
-export default function <A>(k: string, v: A | Source<A>, o?: Source<A>): any;
+export declare function get<A, B>(path: string, o: B): A;
+export declare function set<A, B>(path: string, value: A, obj: B): B;
+export default function <A, B>(k: string, v: A | B, o?: A): {};
