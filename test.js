@@ -1,4 +1,4 @@
-var property = require('./');
+var property = require('./').default;  
 var must = require('must');
 var user;
 var o;
