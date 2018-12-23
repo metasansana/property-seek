@@ -181,4 +181,11 @@ describe('property-seek', function() {
 
     });
 
+  it('should preserve escaped dots', function() {
+
+    must(property('dot..something', 12, {}))
+    .eql({'dot.something':12});
+
+  });
+
 });

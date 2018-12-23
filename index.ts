@@ -1,3 +1,13 @@
+const ESCAPED_SUBS = '@xR25$e!#fda8f623';
+
+function preserve_escaped(value:string) {
+  return value.split('..').join(ESCAPED_SUBS);
+}
+
+function unpreserve_escaped(value:string) {
+  return value.split(ESCAPED_SUBS).join('.');
+}
+
 function boundary_to_dot(value: string) {
     return value.split('][').join('.').split('[').join('.');
 }
@@ -16,12 +26,13 @@ function escape_dots(value: string) {
 }
 
 function unescape_dots(value: string) {
-    return value.split('&&').join('.');
+    return unpreserve_escaped(value.split('&&').join('.'));
 }
 
 function partify(value: string) {
     if (!value) return;
-    return escape_dots(strip_braces(boundary_to_dot('' + value))).split('.');
+  return escape_dots(strip_braces(boundary_to_dot(
+    preserve_escaped('' + value)))).split('.');
 }
 
 export interface Cloneable<B> {
