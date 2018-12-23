@@ -1,5 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ESCAPED_SUBS = '@xR25$e!#fda8f623';
+function preserve_escaped(value) {
+    return value.split('..').join(ESCAPED_SUBS);
+}
+function unpreserve_escaped(value) {
+    return value.split(ESCAPED_SUBS).join('.');
+}
 function boundary_to_dot(value) {
     return value.split('][').join('.').split('[').join('.');
 }
@@ -17,12 +24,12 @@ function escape_dots(value) {
     }).join('');
 }
 function unescape_dots(value) {
-    return value.split('&&').join('.');
+    return unpreserve_escaped(value.split('&&').join('.'));
 }
 function partify(value) {
     if (!value)
         return;
-    return escape_dots(strip_braces(boundary_to_dot('' + value))).split('.');
+    return escape_dots(strip_braces(boundary_to_dot(preserve_escaped('' + value)))).split('.');
 }
 function canClone(o) {
     return (typeof o.__CLONE__ === 'function');
